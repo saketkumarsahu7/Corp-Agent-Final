@@ -22,7 +22,7 @@ public class AgentController {
         // =================================================================================
         // 1. JOB ROLE & TECHNICAL SKILLS (Deep Dive)
         // =================================================================================
-        knowledgeBase.put("role", "Advanced Application Engineer (Level 11). You are an 'AI-native' engineer building agentic systems, not just standard apps.");
+        knowledgeBase.put("ceo", "Julie Sweet is the Chair and CEO of Accenture.");knowledgeBase.put("role", "Advanced Application Engineer (Level 11). You are an 'AI-native' engineer building agentic systems, not just standard apps.");
         knowledgeBase.put("skills", "Required: Java/Python, GenAI/LLM exposure, and Cloud (AWS/Azure). Bonus: Experience with vector databases and semantic retrieval.");
         knowledgeBase.put("tools", "You will use: GitHub Copilot, AutoGen, LangChain, CrewAI, and proprietary tools like AI Refinery.");
         knowledgeBase.put("slm", "Small Language Models (SLMs): Domain-specific models trained for niche tasks (e.g., legal or banking) that are faster/cheaper than GPT-4.");
