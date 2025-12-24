@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accenture Corp-Agent | Intelligent Assistant</title>
+    <style>
+        /* Modern, clean styling suitable for a corporate demo */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .chat-container { width: 450px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .header { text-align: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .header h2 { margin: 0; color: #a100ff; } /* Accenture Purple */
+        .header p { font-size: 13px; color: #666; margin-top: 5px; }
+        #chat-box { height: 350px; overflow-y: auto; padding: 10px; background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 14px; border-radius: 8px; font-size: 14px; max-width: 80%; line-height: 1.4; }
+        .user-msg { background-color: #e1effe; align-self: flex-end; color: #1e429f; border-bottom-right-radius: 2px; }
+        .agent-msg { background-color: #f3f0ff; align-self: flex-start; color: #5b21b6; border-left: 4px solid #a100ff; border-bottom-left-radius: 2px; }
+        .input-area { display: flex; gap: 10px; }
+        input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 14px; }
+        input:focus { border-color: #a100ff; }
+        button { background-color: #a100ff; color: white; border: none; padding: 0 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: background 0.2s; }
+        button:hover { background-color: #7c00c7; }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="header">
+        <h2>Corp-Agent</h2>
+        <p>Autonomous Support System (GenAI Prototype)</p>
+    </div>
+    <div id="chat-box">
+        <div class="message agent-msg"><strong>Agent:</strong> Hello! I am your Domain-Specific Agent. I can automate answers for HR & IT workflows. Try asking about "VPN issues" or "Leave policy".</div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Type your query here..." onkeypress="handleEnter(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    function handleEnter(e) { if(e.key === 'Enter') sendMessage(); }
+
+    function sendMessage() {
+        let input = document.getElementById("user-input");
+        let chatBox = document.getElementById("chat-box");
+        let text = input.value;
+        if(text.trim() === "") return;
+
+        // Display User Message
+        chatBox.innerHTML += `<div class="message user-msg">${text}</div>`;
+        input.value = "";
+        scrollToBottom();
+
+        // Send to Java Backend
+        fetch('/ask-agent', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'query=' + encodeURIComponent(text)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display Agent Response
+            chatBox.innerHTML += `<div class="message agent-msg">${data.answer}</div>`;
+            scrollToBottom();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            chatBox.innerHTML += `<div class="message agent-msg" style="color:red">Error connecting to agent core.</div>`;
+        });
+    }
+
+    function scrollToBottom() {
+        let chatBox = document.getElementById("chat-box");
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
